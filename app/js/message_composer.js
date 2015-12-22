@@ -9,7 +9,7 @@
 
 /* EmojiHelper */
 
-(function (global, emojis, categories, spritesheets) {
+(function (global, emojis, categories) {
 
 
   var emojis = {};
@@ -23,7 +23,7 @@
   var len1, len2;
 
   for (i = 0, len1 = categories.length; i < len1; i++) {
-    totalColumns = spritesheets[i][1];
+    totalColumns = 40;
     for (j = 0, len2 = categories[i].length; j < len2; j++) {
       code = categories[i][j];
       emoji = Config.Emoji[code];
@@ -127,7 +127,7 @@
     searchEmojis: searchEmojis
   };
 
-})(window, Config.Emoji, Config.EmojiCategories, Config.EmojiCategorySpritesheetDimens);
+})(window, Config.Emoji, Config.EmojiCategories);
 
 
 function EmojiTooltip (btnEl, options) {
@@ -406,7 +406,7 @@ EmojiTooltip.prototype.updateEmojiContents = function () {
   if (this.cat > 0) {
     var categoryIndex = this.cat - 1;
     var emoticonCodes = Config.EmojiCategories[categoryIndex];
-    var totalColumns = Config.EmojiCategorySpritesheetDimens[categoryIndex][1];
+    var totalColumns = 40;
     var count = emoticonCodes.length;
     var emoticonCode, emoticonData, i, x, y;
 
@@ -415,7 +415,7 @@ EmojiTooltip.prototype.updateEmojiContents = function () {
       emoticonData = Config.Emoji[emoticonCode];
       x = iconSize * (i % totalColumns);
       y = iconSize * Math.floor(i / totalColumns);
-      html.push('<a class="composer_emoji_btn" title=":' + encodeEntities(emoticonData[1][0]) + ':" data-code="' + encodeEntities(emoticonCode) + '"><i class="emoji emoji-w' + iconSize + ' emoji-spritesheet-' + categoryIndex + '" style="background-position: -' + x + 'px -' + y + 'px;"></i></a>');
+      html.push('<a class="composer_emoji_btn" title=":' + encodeEntities(emoticonData[1][0]) + ':" data-code="' + encodeEntities(emoticonCode) + '"><i class="emoji emoji-w' + iconSize + ' emoji-spritesheet" style="background-position: -' + x + 'px -' + y + 'px;"></i></a>');
     }
     renderContent();
   }
@@ -433,7 +433,7 @@ EmojiTooltip.prototype.updateEmojiContents = function () {
           pos = spritesheet[1];
           x = iconSize * spritesheet[3];
           y = iconSize * spritesheet[2];
-          html.push('<a class="composer_emoji_btn" title=":' + encodeEntities(emoticonData[1][0]) + ':" data-code="' + encodeEntities(emoticonCode) + '"><i class="emoji emoji-w' + iconSize + ' emoji-spritesheet-' + categoryIndex + '" style="background-position: -' + x + 'px -' + y + 'px;"></i></a>');
+          html.push('<a class="composer_emoji_btn" title=":' + encodeEntities(emoticonData[1][0]) + ':" data-code="' + encodeEntities(emoticonCode) + '"><i class="emoji emoji-w' + iconSize + ' emoji-spritesheet" style="background-position: -' + x + 'px -' + y + 'px;"></i></a>');
         }
       }
       renderContent();
@@ -656,7 +656,7 @@ EmojiPanel.prototype.update = function () {
         pos = spritesheet[1];
         x = iconSize * spritesheet[3];
         y = iconSize * spritesheet[2];
-        html.push('<a class="composer_emoji_btn" title=":' + encodeEntities(emoticonData[1][0]) + ':" data-code="' + encodeEntities(emoticonCode) + '"><i class="emoji emoji-w20 emoji-spritesheet-' + categoryIndex + '" style="background-position: -' + x + 'px -' + y + 'px;"></i></a>');
+        html.push('<a class="composer_emoji_btn" title=":' + encodeEntities(emoticonData[1][0]) + ':" data-code="' + encodeEntities(emoticonCode) + '"><i class="emoji emoji-w20 emoji-spritesheet" style="background-position: -' + x + 'px -' + y + 'px;"></i></a>');
       }
     }
     self.containerEl.html(html.join(''));
@@ -1279,7 +1279,7 @@ MessageComposer.prototype.getEmojiHtml = function (code, emoji) {
   var x = iconSize * spritesheet[3];
   var y = iconSize * spritesheet[2];
 
-  return '<img src="img/blank.gif" alt=":' + encodeEntities(emoji[1]) + ':" data-code="' + encodeEntities(code) + '" class="emoji emoji-w20 emoji-spritesheet-' + categoryIndex + '" style="background-position: -' + x + 'px -' + y + 'px;" onresizestart="return false" />';
+  return '<img src="img/blank.gif" alt=":' + encodeEntities(emoji[1]) + ':" data-code="' + encodeEntities(code) + '" class="emoji emoji-w20 emoji-spritesheet" style="background-position: -' + x + 'px -' + y + 'px;" onresizestart="return false" />';
 }
 
 MessageComposer.prototype.setValue = function (text) {
@@ -1374,7 +1374,7 @@ MessageComposer.prototype.showEmojiSuggestions = function (codes) {
       pos = spritesheet[1];
       x = iconSize * spritesheet[3];
       y = iconSize * spritesheet[2];
-      html.push('<li><a class="composer_emoji_option" data-code="' + encodeEntities(emoticonCode) + '"><i class="emoji emoji-w', iconSize, ' emoji-spritesheet-' + categoryIndex + '" style="background-position: -' + x + 'px -' + y + 'px;"></i><span class="composer_emoji_shortcut">:' + encodeEntities(emoticonData[1][0]) + ':</span></a></li>');
+      html.push('<li><a class="composer_emoji_option" data-code="' + encodeEntities(emoticonCode) + '"><i class="emoji emoji-w', iconSize, ' emoji-spritesheet" style="background-position: -' + x + 'px -' + y + 'px;"></i><span class="composer_emoji_shortcut">:' + encodeEntities(emoticonData[1][0]) + ':</span></a></li>');
     }
   }
 

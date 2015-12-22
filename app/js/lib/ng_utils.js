@@ -1204,8 +1204,8 @@ angular.module('izhukov.utils', [])
 
   function getEmojiSpritesheetCoords(emojiCode) {
     var i, row, column, totalColumns;
+    totalColumns = 40;
     for (var cat = 0; cat < Config.EmojiCategories.length; cat++) {
-      totalColumns = Config.EmojiCategorySpritesheetDimens[cat][1];
       i = Config.EmojiCategories[cat].indexOf(emojiCode);
       if (i > -1) {
         row = Math.floor(i / totalColumns);
@@ -1671,7 +1671,7 @@ angular.module('izhukov.utils', [])
       text = text.replace(/\ufe0f|&#65039;|&#65533;|&#8205;/g, '', text);
       var emojiSizeClass = curEmojiSize == 18 ? '' : (' emoji-w' + curEmojiSize);
       text = text.replace(/<span class="emoji emoji-(\d)-(\d+)-(\d+)"(.+?)<\/span>/g,
-                          '<span class="emoji ' + emojiSizeClass + ' emoji-spritesheet-$1" style="background-position: -$2px -$3px;" $4</span>');
+                          '<span class="emoji ' + emojiSizeClass + ' emoji-spritesheet" style="background-position: -$2px -$3px;" $4</span>');
     }
 
     return $sce.trustAs('html', text);
