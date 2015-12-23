@@ -27,7 +27,7 @@
     for (j = 0, len2 = categories[i].length; j < len2; j++) {
       code = categories[i][j];
       emoji = Config.Emoji[code];
-      shortcut = emoji.length > 0 ? emoji.shortcuts[0] : ""; // TODO remove
+      shortcut = emoji.shortcuts.length > 0 ? emoji.shortcuts[0] : ""; // TODO remove
       emojis[code] = [code, shortcut];
       shortcuts[shortcut] = code;
       spritesheetPositions[code] = [i, j, emoji.x, emoji.y];
