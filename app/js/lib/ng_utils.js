@@ -1203,15 +1203,18 @@ angular.module('izhukov.utils', [])
   };
 
   function getEmojiSpritesheetCoords(emojiCode) {
-    var i, row, column, totalColumns;
+    var i, row, column, pos, totalColumns;
     totalColumns = 40;
+    pos = 0;
     for (var cat = 0; cat < Config.EmojiCategories.length; cat++) {
       i = Config.EmojiCategories[cat].indexOf(emojiCode);
       if (i > -1) {
-        row = Math.floor(i / totalColumns);
-        column = (i % totalColumns);
+        pos += i;
+        row = Math.floor(pos / totalColumns);
+        column = (pos % totalColumns);
         return { category: cat, row: row, column: column };
       }
+      pos += Config.EmojiCategories[cat].length;
     }
     console.error('emoji not found in spritesheet', emojiCode);
     return null;

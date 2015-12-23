@@ -19,7 +19,7 @@
 
   var popular = 'joy,kissing_heart,heart,heart_eyes,blush,grin,+1,relaxed,pensive,smile,sob,kiss,unamused,flushed,stuck_out_tongue_winking_eye,see_no_evil,wink,smiley,cry,stuck_out_tongue_closed_eyes,scream,rage,smirk,disappointed,sweat_smile,kissing_closed_eyes,speak_no_evil,relieved,grinning,yum,laughing,ok_hand,neutral_face,confused'.split(',');
 
-  var i, j, code, shortcut, emoji, row, column, totalColumns;
+  var i, j, code, shortcut, emoji, totalColumns;
   var len1, len2;
 
   for (i = 0, len1 = categories.length; i < len1; i++) {
@@ -27,10 +27,10 @@
     for (j = 0, len2 = categories[i].length; j < len2; j++) {
       code = categories[i][j];
       emoji = Config.Emoji[code];
-      shortcut = emoji[1][0];
-      emojis[code] = [emoji[0], shortcut];
+      shortcut = emoji.length > 0 ? emoji.shortcuts[0] : ""; // TODO remove
+      emojis[code] = [code, shortcut];
       shortcuts[shortcut] = code;
-      spritesheetPositions[code] = [i, j, Math.floor(j / totalColumns), j % totalColumns];
+      spritesheetPositions[code] = [i, j, emoji.x, emoji.y];
     }
   }
 
@@ -405,35 +405,35 @@ EmojiTooltip.prototype.updateEmojiContents = function () {
 
   if (this.cat > 0) {
     var categoryIndex = this.cat - 1;
-    var emoticonCodes = Config.EmojiCategories[categoryIndex];
+    var emojiCodes = Config.EmojiCategories[categoryIndex];
     var totalColumns = 40;
-    var count = emoticonCodes.length;
-    var emoticonCode, emoticonData, i, x, y;
+    var count = emojiCodes.length;
+    var emojiCode, emoji, shortcut;
+    var i, x, y;
 
     for (i = 0; i < count; i++) {
-      emoticonCode = emoticonCodes[i];
-      emoticonData = Config.Emoji[emoticonCode];
-      x = iconSize * (i % totalColumns);
-      y = iconSize * Math.floor(i / totalColumns);
-      html.push('<a class="composer_emoji_btn" title=":' + encodeEntities(emoticonData[1][0]) + ':" data-code="' + encodeEntities(emoticonCode) + '"><i class="emoji emoji-w' + iconSize + ' emoji-spritesheet" style="background-position: -' + x + 'px -' + y + 'px;"></i></a>');
+      emojiCode = emojiCodes[i];
+      emoji = Config.Emoji[emojiCode];
+      x = iconSize * emoji.x;
+      y = iconSize * emoji.y;
+      shortcut = emoji.shortcuts.length > 0 ? emoji.shortcuts[0] : ""; // TODO remove
+      html.push('<a class="composer_emoji_btn" title=":' + encodeEntities(shortcut) + ':" data-code="' + encodeEntities(emojiCode) + '"><i class="emoji emoji-w' + iconSize + ' emoji-spritesheet" style="background-position: -' + x + 'px -' + y + 'px;"></i></a>');
     }
     renderContent();
   }
   else {
     EmojiHelper.getPopularEmoji(function (popularEmoji) {
-      var emoticonCode, emoticonData, spritesheet, pos, categoryIndex;
+      var emojiCode, emoji, shortcut;
       var count = popularEmoji.length;
       var i, x, y;
 
       for (i = 0; i < count; i++) {
-        emoticonCode = popularEmoji[i].code;
-        if (emoticonData = Config.Emoji[emoticonCode]) {
-          spritesheet = EmojiHelper.spritesheetPositions[emoticonCode];
-          categoryIndex = spritesheet[0];
-          pos = spritesheet[1];
-          x = iconSize * spritesheet[3];
-          y = iconSize * spritesheet[2];
-          html.push('<a class="composer_emoji_btn" title=":' + encodeEntities(emoticonData[1][0]) + ':" data-code="' + encodeEntities(emoticonCode) + '"><i class="emoji emoji-w' + iconSize + ' emoji-spritesheet" style="background-position: -' + x + 'px -' + y + 'px;"></i></a>');
+        emojiCode = popularEmoji[i].code;
+        if (emoji = Config.Emoji[emojiCode]) {
+          x = iconSize * emoji.x;
+          y = iconSize * emoji.y;
+          shortcut = emoji.shortcuts.length > 0 ? emoji.shortcuts[0] : ""; // TODO remove
+          html.push('<a class="composer_emoji_btn" title=":' + encodeEntities(shortcut) + ':" data-code="' + encodeEntities(emojiCode) + '"><i class="emoji emoji-w' + iconSize + ' emoji-spritesheet" style="background-position: -' + x + 'px -' + y + 'px;"></i></a>');
         }
       }
       renderContent();
@@ -644,19 +644,17 @@ EmojiPanel.prototype.update = function () {
   var iconSize = Config.Mobile ? 26 : 20;
 
   EmojiHelper.getPopularEmoji(function (popularEmoji) {
-    var emoticonCode, emoticonData, spritesheet, pos, categoryIndex;
+    var emojiCode, emoji, shortcut;
     var count = popularEmoji.length;
     var i, x, y;
 
     for (i = 0; i < count; i++) {
-      emoticonCode = popularEmoji[i].code;
-      if (emoticonData = Config.Emoji[emoticonCode]) {
-        spritesheet = EmojiHelper.spritesheetPositions[emoticonCode];
-        categoryIndex = spritesheet[0];
-        pos = spritesheet[1];
-        x = iconSize * spritesheet[3];
-        y = iconSize * spritesheet[2];
-        html.push('<a class="composer_emoji_btn" title=":' + encodeEntities(emoticonData[1][0]) + ':" data-code="' + encodeEntities(emoticonCode) + '"><i class="emoji emoji-w20 emoji-spritesheet" style="background-position: -' + x + 'px -' + y + 'px;"></i></a>');
+      emojiCode = popularEmoji[i].code;
+      if (emoji = Config.Emoji[emojiCode]) {
+        x = iconSize * emoji.x;
+        y = iconSize * emoji.y;
+        shortcut = emoji.length > 0 ? emoji.shortcuts[0] : ""; // TODO remove
+        html.push('<a class="composer_emoji_btn" title=":' + encodeEntities(shortcut) + ':" data-code="' + encodeEntities(emojiCode) + '"><i class="emoji emoji-w20 emoji-spritesheet" style="background-position: -' + x + 'px -' + y + 'px;"></i></a>');
       }
     }
     self.containerEl.html(html.join(''));
@@ -1273,11 +1271,8 @@ MessageComposer.prototype.onChange = function (e) {
 MessageComposer.prototype.getEmojiHtml = function (code, emoji) {
   emoji = emoji || EmojiHelper.emojis[code];
   var iconSize = 20;
-  var spritesheet = EmojiHelper.spritesheetPositions[code];
-  var categoryIndex = spritesheet[0];
-  var pos = spritesheet[1];
-  var x = iconSize * spritesheet[3];
-  var y = iconSize * spritesheet[2];
+  var x = iconSize * emoji.x;
+  var y = iconSize * emoji.y;
 
   return '<img src="img/blank.gif" alt=":' + encodeEntities(emoji[1]) + ':" data-code="' + encodeEntities(code) + '" class="emoji emoji-w20 emoji-spritesheet" style="background-position: -' + x + 'px -' + y + 'px;" onresizestart="return false" />';
 }
@@ -1359,22 +1354,20 @@ MessageComposer.prototype.showEmojiSuggestions = function (codes) {
   var html = [];
   var iconSize = Config.Mobile ? 26 : 20;
 
-  var emoticonCode, emoticonData, spritesheet, pos, categoryIndex;
-  var count = Math.min(5, codes.length);
+  var emojiCode, emoji, shortcut;
+  var count =  Math.min(5, codes.length);
   var i, x, y;
 
   for (i = 0; i < count; i++) {
-    emoticonCode = codes[i];
-    if (emoticonCode.code) {
-      emoticonCode = emoticonCode.code;
+    emojiCode = codes[i];
+    if (emojiCode.code) {
+      emojiCode = emojiCode.code;
     }
-    if (emoticonData = Config.Emoji[emoticonCode]) {
-      spritesheet = EmojiHelper.spritesheetPositions[emoticonCode];
-      categoryIndex = spritesheet[0];
-      pos = spritesheet[1];
-      x = iconSize * spritesheet[3];
-      y = iconSize * spritesheet[2];
-      html.push('<li><a class="composer_emoji_option" data-code="' + encodeEntities(emoticonCode) + '"><i class="emoji emoji-w', iconSize, ' emoji-spritesheet" style="background-position: -' + x + 'px -' + y + 'px;"></i><span class="composer_emoji_shortcut">:' + encodeEntities(emoticonData[1][0]) + ':</span></a></li>');
+    if (emoji = Config.Emoji[emojiCode]) {
+      x = iconSize * emoji.x;
+      y = iconSize * emoji.y;
+      shortcut = emoji.shortcuts.length > 0 ? emoji.shortcuts[0] : ""; // TODO remove
+      html.push('<li><a class="composer_emoji_option" data-code="' + encodeEntities(emojiCode) + '"><i class="emoji emoji-w', iconSize, ' emoji-spritesheet" style="background-position: -' + x + 'px -' + y + 'px;"></i><span class="composer_emoji_shortcut">:' + encodeEntities(shortcut) + ':</span></a></li>');
     }
   }
 
